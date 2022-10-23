@@ -5,13 +5,19 @@ export interface IntegerInputProps extends CommonInputProps {}
 
 const IntegerInput = forwardRef<HTMLInputElement, IntegerInputProps>(
   (props, ref) => {
-    const { onChange, className, ...restProps } = props;
+    const {
+      onChange,
+      className,
+      value,
+      defaultValue = 0,
+      ...restProps
+    } = props;
 
     return (
       <input
         {...restProps}
+        {...(!!value ? { value } : { defaultValue })}
         ref={ref}
-        defaultValue={"0"}
         className={`${className}`}
         onChange={(event) => {
           if (event.target.value === "-") {
