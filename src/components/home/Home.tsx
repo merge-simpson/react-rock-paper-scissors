@@ -1,8 +1,8 @@
-import Player from "@models/game/player/Player";
 import RockPaperScissors from "@models/game/state/domain/RockPaperScissors";
 import useToast from "@store/common/useToast";
 import useGameStore from "@store/game/gameStore";
 import { DarkButton, DefaultButton } from "@styles/button";
+import IntegerInput from "@utils/common/form/IntegerInput";
 import { useCallback, useEffect, useState } from "react";
 import ControlPannel from "./game/layout/control/ControlPannel";
 import PlayerGamePannel from "./game/layout/player-pannel/PlayerGamePannel";
@@ -26,6 +26,8 @@ const Home = () => {
     startWithComs,
     deal,
   } = gameStore;
+
+  const [cntCounterAI, setCntCounterAI] = useState<number>(1);
 
   useEffect(() => {
     // not necessary on this logic
@@ -80,12 +82,42 @@ const Home = () => {
       <div className="flex flex-col items-center gap-4">
         <main className="w-[80vw] flex flex-col items-center gap-4 py-8 border shadow rounded-md">
           <h1 className="text-2xl font-bold">Game Board</h1>
-          <div className="w-full px-4 flex justify-end">
+          <div className="w-full px-4 flex flex-col gap-2 items-end">
+            <aside className="w-fit px-2 flex flex-col gap-2">
+              <h1 className="font-bold">Set COMs</h1>
+              <div className="flex gap-2 items-center">
+                <button
+                  className="flex justify-center items-center border shadow rounded-full w-10 h-10"
+                  disabled={onGame}
+                  onClick={() => setCntCounterAI(cntCounterAI - 1)}
+                >
+                  -
+                </button>
+                <IntegerInput
+                  readOnly
+                  className="border border-dark w-10 text-right px-1 py-2 rounded-md text-xl font-bold"
+                  value={cntCounterAI}
+                  onChange={(event) =>
+                    setCntCounterAI(+(event.target as HTMLInputElement).value)
+                  }
+                />
+                <button
+                  className="flex justify-center items-center border shadow rounded-full w-10 h-10"
+                  disabled={onGame}
+                  onClick={() => setCntCounterAI(cntCounterAI + 1)}
+                >
+                  +
+                </button>
+              </div>
+            </aside>
             {onGame && (
               <DefaultButton onClick={() => initGame()}>초기화</DefaultButton>
             )}
             {!onGame && (
-              <DarkButton disabled={onGame} onClick={() => startWithComs(0)}>
+              <DarkButton
+                disabled={onGame}
+                onClick={() => startWithComs(cntCounterAI)}
+              >
                 시작
               </DarkButton>
             )}
