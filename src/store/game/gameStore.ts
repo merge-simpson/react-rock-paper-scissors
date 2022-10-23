@@ -15,9 +15,6 @@ interface GameState {
   currentRPS: RockPaperScissors | null;
   currentCountersRPS: (RockPaperScissors | null)[] | null;
 
-  rpsHistory: RockPaperScissors[] | null;
-  counterRPSHistory: RockPaperScissors[][] | null;
-
   setRPS: (rps: RockPaperScissors | null) => void;
   setCountersRPS: (rpsList: (RockPaperScissors | null)[] | null) => void;
 
@@ -27,17 +24,25 @@ interface GameState {
 }
 
 const useGameStore = create<GameState>((set, get) => {
+  /** Confirms deal
+   * @param winRPS  The win state. One of "ROCK", "PAPER", "SCISSORS" or null.
+   * @param loseRPS The lose state. One of "ROCK", "PAPER", "SCISSORS" or null.
+   * @param drawRPSList Can skip and nullable. The draw state. A 1D list of "ROCK", "PAPER", "SCISSORS" and not be duplicated.
+   */
   const confirmDeal = (
-    winRPS: RockPaperScissors,
-    loseRPS: RockPaperScissors
+    winRPS: RockPaperScissors | null,
+    loseRPS: RockPaperScissors | null,
+    drawRPSList?: RockPaperScissors[] | null
   ) => {
     type GameStateKey = { [key in RockPaperScissors]: keyof PlayerGameState };
 
-    const gStateKey = {
-      [winRPS]: "wins" as keyof PlayerGameState,
-      [loseRPS]: "defeats" as keyof PlayerGameState,
-    } as GameStateKey;
+    const gStateKey = {} as GameStateKey;
+    winRPS && (gStateKey[winRPS] = "win");
+    loseRPS && (gStateKey[loseRPS] = "defeat");
+    drawRPSList?.forEach((drawRPS) => (gStateKey[drawRPS] = "draw"));
 
+    // set의 콜백에서 state를 꺼내어 쓸 때 순서 보장이 가장 확실함(해당 시점에 가장 갱신된 상태로 꺼냄)
+    // 특히 이 경우 useCallback을 사용할 수 없는 영역에서 생성하는 함수이므로
     set((state) => {
       const { currentRPS, currentCountersRPS } = state;
 
@@ -57,7 +62,9 @@ const useGameStore = create<GameState>((set, get) => {
         !state.counterGameStates ||
         state.counterGameStates.some((_) => !_)
       ) {
-        const error = new Error(``);
+        const error = new Error(
+          `Someone didn't send any state of Rock Paper Scissors.`
+        );
         throw error;
       }
 
@@ -70,6 +77,7 @@ const useGameStore = create<GameState>((set, get) => {
           ...state.selfGameState,
           [increasingKey]: (state.selfGameState[increasingKey] as number) + 1,
           total: state.selfGameState.total + 1,
+          rpsHistory: [...(state.selfGameState.rpsHistory ?? []), currentRPS],
         },
         counterGameStates: state.counterGameStates.map((gState, idx, arr) => {
           const increasingKey = countersIncreasingKeys[idx];
@@ -78,33 +86,12 @@ const useGameStore = create<GameState>((set, get) => {
             ...gState,
             [increasingKey]: (arr[idx][increasingKey] as number) + 1,
             total: arr[idx].total + 1,
+            rpsHistory: [...gState.rpsHistory, currentCountersRPS[idx]!],
           };
         }),
       };
     });
-    // End of SET
-  };
-
-  const draw = () => {
-    set((state) => {
-      const selfGameState = state.selfGameState
-        ? {
-            ...state.selfGameState,
-            draw: state.selfGameState.draw + 1,
-            total: state.selfGameState.total + 1,
-          }
-        : null;
-      const couterGameStates =
-        state.counterGameStates?.map((gState) => ({
-          ...gState,
-          draw: gState.draw + 1,
-          total: gState.total + 1,
-        })) ?? null;
-      return {
-        selfGameState,
-        counterGameStates: couterGameStates,
-      };
-    });
+    // End of confirmDeal
   };
 
   // Return
@@ -137,8 +124,6 @@ const useGameStore = create<GameState>((set, get) => {
         counterGameStates: null,
         currentRPS: null,
         currentCountersRPS: null,
-        rpsHistory: null,
-        counterRPSHistory: null,
       });
       option?.success && option.success();
     },
@@ -154,7 +139,7 @@ const useGameStore = create<GameState>((set, get) => {
 
       const selfGameState: PlayerGameState = {
         player: state.self,
-        wins: 0,
+        win: 0,
         defeat: 0,
         draw: 0,
         total: 0,
@@ -169,7 +154,7 @@ const useGameStore = create<GameState>((set, get) => {
 
       const couterGameStates = counters.map<PlayerGameState>((player) => ({
         player,
-        wins: 0,
+        win: 0,
         defeat: 0,
         draw: 0,
         total: 0,
@@ -182,11 +167,8 @@ const useGameStore = create<GameState>((set, get) => {
         selfGameState,
         counters,
         counterGameStates: couterGameStates,
-        rpsHistory: [] as RockPaperScissors[],
-        counterRPSHistory: [
-          ...new Array(counters.length).fill([]),
-        ] as RockPaperScissors[][],
       });
+
       option?.success && option.success();
       return true;
     },
@@ -213,7 +195,7 @@ const useGameStore = create<GameState>((set, get) => {
         return;
       }
       if (compositions.length !== 2) {
-        draw();
+        confirmDeal(null, null, compositions);
         return;
       }
 
@@ -250,34 +232,6 @@ const useGameStore = create<GameState>((set, get) => {
         console.error(error.stack);
         return;
       }
-
-      console.log([...(state.rpsHistory ?? []), currentRPS]);
-
-      // set의 콜백에서 state를 꺼내어 쓸 때 순서 보장이 가장 확실함(해당 시점에 가장 갱신된 상태로 꺼냄)
-      set((state) => ({
-        selfGameState: state.selfGameState
-          ? {
-              ...state.selfGameState,
-              rpsHistory: [
-                ...(state.selfGameState.rpsHistory ?? []),
-                currentRPS,
-              ],
-            }
-          : state.selfGameState,
-
-        counterGameStates: state.counterGameStates?.map(
-          (gState, counterIndex) =>
-            gState
-              ? {
-                  ...gState,
-                  rpsHistory: [
-                    ...gState.rpsHistory,
-                    currentCountersRPS[counterIndex],
-                  ],
-                }
-              : gState
-        )!,
-      }));
 
       option?.success && option.success();
     },
