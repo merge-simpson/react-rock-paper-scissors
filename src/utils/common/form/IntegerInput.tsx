@@ -16,7 +16,7 @@ const IntegerInput = forwardRef<HTMLInputElement, IntegerInputProps>(
     return (
       <input
         {...restProps}
-        {...(!!value ? { value } : { defaultValue })}
+        {...(value != null ? { value } : { defaultValue })}
         ref={ref}
         className={`${className}`}
         onChange={(event) => {
