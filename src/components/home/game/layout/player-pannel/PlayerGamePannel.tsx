@@ -52,7 +52,7 @@ const PlayerGamePannel: FC<PlayerGamePannelProps> = ({
           </aside>
         </section>
         <ul>
-          <li>WIN: {gameState?.wins}</li>
+          <li>WIN: {gameState?.win}</li>
           <li>DEFEAT: {gameState?.defeat}</li>
           <li>DRAW: {gameState?.draw}</li>
           <li>(TOTAL: {gameState?.total})</li>
