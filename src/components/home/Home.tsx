@@ -79,6 +79,9 @@ const Home = () => {
   return (
     <div>
       <h1 className="text-2xl">Rock Paper Scissors</h1>
+      <aside>
+        <span>반응형은 적용 안 하므로 가로폭 1200 이상에서 보세요.</span>
+      </aside>
       <div className="flex flex-col items-center gap-4">
         <main className="w-[80vw] flex flex-col items-center gap-4 py-8 border shadow rounded-md">
           <h1 className="text-2xl font-bold">Game Board</h1>
@@ -90,7 +93,12 @@ const Home = () => {
                 <button
                   className="flex justify-center items-center border shadow rounded-full w-10 h-10"
                   disabled={onGame}
-                  onClick={() => setCntCounterAI(cntCounterAI - 1)}
+                  onClick={() => {
+                    const min = 1;
+                    setCntCounterAI(
+                      cntCounterAI - +(min != null ? cntCounterAI > min : 1)
+                    );
+                  }}
                 >
                   -
                 </button>
@@ -105,7 +113,12 @@ const Home = () => {
                 <button
                   className="flex justify-center items-center border shadow rounded-full w-10 h-10"
                   disabled={onGame}
-                  onClick={() => setCntCounterAI(cntCounterAI + 1)}
+                  onClick={() => {
+                    const max = undefined;
+                    setCntCounterAI(
+                      cntCounterAI + +(max != null ? cntCounterAI < max : 1)
+                    );
+                  }}
                 >
                   +
                 </button>
@@ -123,14 +136,15 @@ const Home = () => {
               </DarkButton>
             )}
           </div>
-          <section className="w-full grid grid-cols-2 divide-x-2 px-4">
+          <section className="w-full grid grid-cols-2 px-4 max-h-[38rem] overflow-scroll">
             <PlayerGamePannel
+              className="py-4"
               player={self}
               currentRPS={currentRPS}
               gameState={selfGameState}
             />
             {!counters?.length && (
-              <div className="px-4">
+              <div className="px-4 border-l-2">
                 <div className="border font-bold h-full rounded bg-gray-50 shadow-inner flex justify-center items-center">
                   상대방이 입장하지 않았습니다.
                 </div>
@@ -140,9 +154,13 @@ const Home = () => {
               counters.map((counter, idx) => (
                 <PlayerGamePannel
                   key={`COUNTER-${idx}`}
+                  className={`py-4 ${!(idx & 1) ? "border-l-2" : ""} ${
+                    idx > 0 ? "border-t-2" : ""
+                  }`}
                   player={counter}
                   currentRPS={
-                    (couterGameStates && couterGameStates[idx].rpsHistory[0]) ??
+                    (couterGameStates &&
+                      couterGameStates[idx].rpsHistory.at(-1)) ??
                     null
                   }
                   gameState={
