@@ -85,6 +85,7 @@ const Home = () => {
           <div className="w-full px-4 flex flex-col gap-2 items-end">
             <aside className="w-fit px-2 flex flex-col gap-2">
               <h1 className="font-bold">Set COMs</h1>
+              {/* Mk Component props: {disabled: boolean, onNagativeClick, onPositiveClick, min, max, ... } */}
               <div className="flex gap-2 items-center">
                 <button
                   className="flex justify-center items-center border shadow rounded-full w-10 h-10"
