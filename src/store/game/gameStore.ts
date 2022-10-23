@@ -69,6 +69,7 @@ const useGameStore = create<GameState>((set, get) => {
         selfGameState: {
           ...state.selfGameState,
           [increasingKey]: (state.selfGameState[increasingKey] as number) + 1,
+          total: state.selfGameState.total + 1,
         },
         counterGameStates: state.counterGameStates.map((gState, idx, arr) => {
           const increasingKey = countersIncreasingKeys[idx];
@@ -76,6 +77,7 @@ const useGameStore = create<GameState>((set, get) => {
           return {
             ...gState,
             [increasingKey]: (arr[idx][increasingKey] as number) + 1,
+            total: arr[idx].total + 1,
           };
         }),
       };
