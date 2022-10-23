@@ -3,7 +3,7 @@ import RockPaperScissors from "./domain/RockPaperScissors";
 
 export default interface PlayerGameState {
   player: Player;
-  wins: number;
+  win: number;
   defeat: number;
   draw: number;
   total: number;
