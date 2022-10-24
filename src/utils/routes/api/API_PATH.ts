@@ -1,4 +1,4 @@
-import APIMethod from "../../../models/common/api/APIMethod";
+import APIMethod from "@models/common/api/APIMethod";
 
 // This is just an example
 const API_PATH = {
