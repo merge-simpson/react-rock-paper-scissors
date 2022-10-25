@@ -36,7 +36,7 @@ const PlayerGamePannel: FC<PlayerGamePannelProps> = ({
             <ol className="grid grid-cols-2 gap-1">
               {[...(gameState?.rpsHistory ?? [])]
                 ?.reverse()
-                .slice(0, 13)
+                .slice(1, 13)
                 .map((rps, idx) => (
                   <li
                     key={`RPS-HISTORY-${idx}`}
