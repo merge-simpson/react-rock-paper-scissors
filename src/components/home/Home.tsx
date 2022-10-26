@@ -1,5 +1,5 @@
 import RockPaperScissors from "@models/game/state/domain/RockPaperScissors";
-import useToast from "@store/common/useToast";
+import useToast from "@utils/common/toast/store/useToast";
 import useGameStore from "@store/game/gameStore";
 import { DarkButton, DefaultButton } from "@styles/button";
 import IntegerInput from "@utils/common/form/IntegerInput";

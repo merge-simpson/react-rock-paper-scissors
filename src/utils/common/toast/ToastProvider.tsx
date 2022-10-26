@@ -1,4 +1,4 @@
-import useToast from "@store/common/useToast";
+import useToast from "@utils/common/toast/store/useToast";
 import { HTMLProps, FunctionComponent as FC } from "react";
 import { motion } from "framer-motion";
 
