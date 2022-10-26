@@ -22,9 +22,10 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         className={`${className}`}
         onKeyDown={(event) => {
           if ("backspace" === event.key.toLowerCase()) {
-            // 변경되기 전 값을 알 수 있음.
-            if ((event.target as HTMLInputElement).value === "-0") {
-              (event.target as HTMLInputElement).value = "0";
+            // onKeyDown에서는 변경되기 전 값을 알 수 있음.
+            const target = event.target as HTMLInputElement;
+            if (target.value === "-0") {
+              target.value = "0";
             }
           }
 
@@ -41,6 +42,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
               .replace(/-/g, "");
 
             event.target.value = `-${secondary}${primary}`;
+            onChange && onChange(event);
             return;
           }
           if (dotIndex !== event.target.value.lastIndexOf(".")) {
@@ -50,14 +52,17 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
               .replace(/\./g, "");
 
             event.target.value = `${primary}.${secondary}`;
+            onChange && onChange(event);
             return;
           }
           if ("-.0" === event.target.value) {
             event.target.value = "-0.";
+            onChange && onChange(event);
             return;
           }
           if (event.target.value.startsWith("-.0")) {
             event.target.value = "-0." + event.target.value.slice(2);
+            onChange && onChange(event);
             return;
           }
           if (
@@ -66,22 +71,27 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
             event.target.value = "-0" + event.target.value.slice(dotIndex);
           }
           if (event.target.value.endsWith(".")) {
+            onChange && onChange(event);
             return;
           }
           if (["-", "-0", "0-", "--"].includes(event.target.value)) {
             event.target.value = "";
             event.target.value = "-0";
+            onChange && onChange(event);
             return;
           }
           if ([".0", "0.", ".", "-."].includes(event.target.value)) {
             event.target.value = "0.";
+            onChange && onChange(event);
             return;
           }
           if ("00" === event.target.value) {
             event.target.value = "0";
+            onChange && onChange(event);
             return;
           }
           if (event.target.value.endsWith("0")) {
+            onChange && onChange(event);
             return;
           }
 
@@ -92,6 +102,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 
           if (!value) {
             event.target.value = "0";
+            onChange && onChange(event);
             return;
           }
 
