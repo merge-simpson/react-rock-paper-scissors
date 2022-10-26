@@ -2,7 +2,7 @@ import "./App.css";
 import UnauthenticatedRoutes from "@components/routes/UnauthenticatedRoutes";
 import { useEffect, useState } from "react";
 import ProtectedRoutes from "@components/routes/ProtectedRoutes";
-import useAuth from "@store/common/useAuth";
+import useAuth from "@store/auth/useAuth";
 
 function App() {
   // const [isAuthenticated, setAuthenticated] = useState<boolean>(false);

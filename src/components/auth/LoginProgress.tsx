@@ -14,7 +14,7 @@ import { Outlet, useParams } from "react-router-dom";
 import { loginStep } from "@utils/auth/routes/LoginOutletComponents";
 import LoginButtonGroup from "./button/LoginButtonGroup";
 import useLoginNavigate from "@utils/auth/routes/useLoginNavigate";
-import useAuth from "@store/common/useAuth";
+import useAuth from "@store/auth/useAuth";
 import ContextCallbackOption from "@models/common/api/ContextCallbackOption";
 import useToast from "@utils/common/toast/store/useToast";
 
