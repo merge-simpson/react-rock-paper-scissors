@@ -1,7 +1,9 @@
 import { CommonInputProps } from "@models/common/props";
 import { forwardRef } from "react";
 
-export interface NumberInputProps extends CommonInputProps {}
+export interface NumberInputProps extends CommonInputProps {
+  asLocale?: boolean;
+}
 
 const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
   (props, ref) => {
@@ -11,6 +13,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       onKeyDown,
       value,
       defaultValue,
+      asLocale = false,
       ...restProps
     } = props;
 
@@ -97,7 +100,6 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 
           const isNag = "-" === event.target.value.at(0); // can be sign(-)
           const abs = event.target.value.slice(+isNag);
-
           const value = +`${isNag ? "-" : ""}${abs.replace(/[^0-9\.]/g, "")}`;
 
           if (!value) {
@@ -106,10 +108,12 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
             return;
           }
 
-          event.target.value = value.toLocaleString("ko-KR", {
-            maximumFractionDigits: 20,
-            minimumFractionDigits: 0,
-          });
+          event.target.value = asLocale
+            ? value.toLocaleString("ko-KR", {
+                maximumFractionDigits: 20,
+                minimumFractionDigits: 0,
+              })
+            : value.toString();
 
           onChange && onChange(event);
         }}
