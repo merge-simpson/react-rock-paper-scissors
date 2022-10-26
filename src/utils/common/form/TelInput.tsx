@@ -16,8 +16,8 @@ const TelInput = forwardRef<HTMLInputElement, TelInputProps>(
         onChange={(event) => {
           const hyphenReg =
             event.target.value.length >= 13
-              ? /^(\d{0,3})(\d{0,4})(\d{0,})$/g
-              : /^(\d{0,3})(\d{0,3})(\d{0,})$/g;
+              ? /^(\d{0,3})(\d{0,4})(\d{0,})$/g // 13자리 또는 그 이상.
+              : /^(\d{0,3})(\d{0,3})(\d{0,})$/g; // 12자리 또는 그 이하.
 
           event.target.value = event.target.value
             .replace(/[^0-9]/g, "")
