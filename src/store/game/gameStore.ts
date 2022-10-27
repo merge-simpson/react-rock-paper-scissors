@@ -4,6 +4,8 @@ import RockPaperScissors from "@models/game/state/domain/RockPaperScissors";
 import PlayerGameState from "@models/game/state/PlayerGameState";
 import create from "zustand";
 
+export type RPSResult = "DRAW" | "LEFT_WIN" | "RIGHT_WIN";
+
 interface GameState {
   onGame: boolean;
 
@@ -24,6 +26,18 @@ interface GameState {
 }
 
 const useGameStore = create<GameState>((set, get) => {
+  // 이 정도 스코프에 생성해 둘 수 있음(재사용성).
+  const D = "DRAW";
+  const R = "RIGHT_WIN";
+  const L = "LEFT_WIN";
+  const DEAL_MAP: RPSResult[][] = [
+    [D, R, L],
+    [L, D, R],
+    [R, L, D],
+  ];
+
+  Object.freeze(DEAL_MAP);
+
   /** Confirms deal
    * @param winRPS  The win state. One of "ROCK", "PAPER", "SCISSORS" or null.
    * @param loseRPS The lose state. One of "ROCK", "PAPER", "SCISSORS" or null.
@@ -208,17 +222,7 @@ const useGameStore = create<GameState>((set, get) => {
       const l = RPS_TO_IDX[compositions[0]];
       const r = RPS_TO_IDX[compositions[1]];
 
-      type DLR = "DRAW" | "LEFT_WIN" | "RIGHT_WIN"; // But no more draw
-      const D = "DRAW";
-      const R = "RIGHT_WIN";
-      const L = "LEFT_WIN";
-      const DEAL_MAP: DLR[][] = [
-        [D, R, L],
-        [L, D, R],
-        [R, L, D],
-      ];
-
-      const result: DLR = DEAL_MAP[l][r];
+      const result: RPSResult = DEAL_MAP[l][r];
 
       if (["LEFT_WIN", "RIGHT_WIN"].includes(result)) {
         const winRPS =
