@@ -29,7 +29,9 @@ npm run dev
 
 # Logic
 
-승부를 가늠하기 위하여 행렬을 사용하는 로직. Matrix to notice who won.
+승부를 가늠하기 위하여 행렬을 사용하는 로직.
+
+Matrix to notice who won.
 
 ### 승부 결정 행렬
 
