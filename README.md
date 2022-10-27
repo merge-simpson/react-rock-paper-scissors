@@ -56,13 +56,13 @@ const RPS_TO_IDX: { [key in RockPaperScissors]: number } = {
 const l = RPS_TO_IDX[compositions[0]];
 const r = RPS_TO_IDX[compositions[1]];
 
-type RPSReulst = "DRAW" | "LEFT_WIN" | "RIGHT_WIN";
+type GameResult = "DRAW" | "LEFT_WIN" | "RIGHT_WIN";
 const D = "DRAW";
 const R = "RIGHT_WIN";
 const L = "LEFT_WIN";
 
 // 승부를 가늠하는 행렬(Matrix to decide winner group)
-const DEAL_MAP: RPSReulst[][] = [
+const DEAL_MAP: GameResult[][] = [
   [D, R, L],
   [L, D, R],
   [R, L, D],
@@ -75,7 +75,7 @@ Index tells the winner group or draw. As `DEAL_MAP[l][r]`
 
 ```
 // expected: one of "LEFT_WIN" or "RIGHT_WIN"
-const result: RPSReulst = DEAL_MAP[l][r];
+const result: GameResult = DEAL_MAP[l][r];
 ```
 
 DEAL_MAP 행렬은 지속적으로 사용되므로 재사용 가능하도록(매번 생성하지 않도록) 리팩토링 하는 것이 좋음.
