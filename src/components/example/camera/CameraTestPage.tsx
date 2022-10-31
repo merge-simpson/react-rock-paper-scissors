@@ -1,9 +1,11 @@
 import { DangerButton, DarkButton } from "@styles/button";
 import { useCallback, useEffect, useRef, useState } from "react";
 import SampleImage from "@assets/img/sample.jpeg";
+import resolveEXIFRotate from "@utils/upload/resolveEXIFRotate";
 
 const CameraTestPage = () => {
   const [files, setFiles] = useState<FileList | null>(null);
+  const [file, setFile] = useState<File | null>(null); // from files
   const [photoUrl, setPhotoUrl] = useState<string | ArrayBuffer | null>(null);
   const imageUploaderRef = useRef<HTMLInputElement | null>(null);
 
@@ -17,6 +19,16 @@ const CameraTestPage = () => {
   useEffect(() => {
     console.debug(photoUrl);
   }, [photoUrl]);
+
+  useEffect(() => {
+    if (!files) {
+      return;
+    }
+
+    resolveEXIFRotate(files)
+      .then(setFile) //
+      .catch(console.error);
+  }, [files]);
 
   return (
     <div className="flex flex-col gap-4 py-4 px-8 items-center justify-center">
