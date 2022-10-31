@@ -1,4 +1,4 @@
-import { DangerButton, DarkButton } from "@styles/button";
+import { DangerButton, DarkButton, SuccessButton } from "@styles/button";
 import { useCallback, useEffect, useRef, useState } from "react";
 import SampleImage from "@assets/img/sample.jpeg";
 import resolveEXIFRotate from "@utils/upload/resolveEXIFRotate";
@@ -8,13 +8,6 @@ const CameraTestPage = () => {
   const [file, setFile] = useState<File | null>(null); // from files
   const [photoUrl, setPhotoUrl] = useState<string | ArrayBuffer | null>(null);
   const imageUploaderRef = useRef<HTMLInputElement | null>(null);
-
-  const clearImage = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
-    (evt) =>
-      imageUploaderRef.current &&
-      setPhotoUrl((imageUploaderRef.current.value = "")),
-    [imageUploaderRef.current]
-  );
 
   useEffect(() => {
     console.debug(photoUrl);
@@ -26,6 +19,13 @@ const CameraTestPage = () => {
         .then(setFile) //
         .catch(console.error);
   }, [files]);
+
+  const clearImage = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
+    (evt) =>
+      imageUploaderRef.current &&
+      setPhotoUrl((imageUploaderRef.current.value = "")),
+    [imageUploaderRef.current]
+  );
 
   return (
     <div className="flex flex-col gap-4 py-4 px-8 items-center justify-center">
@@ -68,31 +68,42 @@ const CameraTestPage = () => {
             </figure>
           </article>
 
-          <label>
-            <input
-              type="file"
-              accept="image/*"
-              ref={imageUploaderRef}
-              className="hidden"
-              onChange={(evt) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(evt.target.files![0]);
-                setFiles(evt.target?.files);
+          <article className="flex flex-col gap-2">
+            <h1 className="font-bold">Control Preview Image</h1>
+            <div className="flex justify-between gap-2">
+              <label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={imageUploaderRef}
+                  className="hidden"
+                  onChange={(evt) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(evt.target.files![0]);
+                    setFiles(evt.target?.files);
 
-                // (Example of onload)
-                reader.onload = (evt) => {
-                  const photoUrl = evt.target?.result;
-                  photoUrl && setPhotoUrl(photoUrl);
-                };
-              }}
-            />
-            <DarkButton onClick={(evt) => imageUploaderRef.current?.click()}>
-              업로드
-            </DarkButton>
-          </label>
-          <label>
-            <DangerButton onClick={clearImage}>즉시 삭제</DangerButton>
-          </label>
+                    // (Example of onload)
+                    reader.onload = (evt) => {
+                      const photoUrl = evt.target?.result;
+                      photoUrl && setPhotoUrl(photoUrl);
+                    };
+                  }}
+                />
+                <DarkButton
+                  onClick={(evt) => imageUploaderRef.current?.click()}
+                >
+                  사진 선택
+                </DarkButton>
+              </label>
+              <label>
+                <DangerButton onClick={clearImage}>즉시 삭제</DangerButton>
+              </label>
+            </div>
+
+            <div className="w-full flex flex-col items-end">
+              <SuccessButton>적용</SuccessButton>
+            </div>
+          </article>
         </section>
       </main>
     </div>
