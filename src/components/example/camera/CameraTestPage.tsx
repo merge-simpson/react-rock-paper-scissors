@@ -21,13 +21,10 @@ const CameraTestPage = () => {
   }, [photoUrl]);
 
   useEffect(() => {
-    if (!files) {
-      return;
-    }
-
-    resolveEXIFRotate(files)
-      .then(setFile) //
-      .catch(console.error);
+    files &&
+      resolveEXIFRotate(files)
+        .then(setFile) //
+        .catch(console.error);
   }, [files]);
 
   return (
