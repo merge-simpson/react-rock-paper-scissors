@@ -2,8 +2,11 @@ import { DangerButton, DarkButton, SuccessButton } from "@styles/button";
 import { useCallback, useEffect, useRef, useState } from "react";
 import SampleImage from "@assets/img/sample.jpeg";
 import resolveEXIFRotate from "@utils/upload/resolveEXIFRotate";
+import useToast from "@utils/common/toast/store/useToast";
 
 const CameraTestPage = () => {
+  const toast = useToast();
+
   const [files, setFiles] = useState<FileList | null>(null);
   const [file, setFile] = useState<File | null>(null); // from files
   const [photoUrl, setPhotoUrl] = useState<string | ArrayBuffer | null>(null);
@@ -25,6 +28,31 @@ const CameraTestPage = () => {
       imageUploaderRef.current &&
       setPhotoUrl((imageUploaderRef.current.value = "")),
     [imageUploaderRef.current]
+  );
+
+  const sendRequest = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
+    (evt) => {
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("paramName", file); // custom param name: from your api server
+
+      const option = {
+        headers: { "Content-Type": "multipart/form-data" },
+      };
+
+      toast.open("Send form data(not really)", 5_000);
+
+      /* (ex)
+        axios.post(url, formData, option)
+          .then(({ data })=>data)
+          .then((data) => {
+            // ...
+          })
+          .catch(console.error)
+      */
+    },
+    [file]
   );
 
   return (
@@ -101,7 +129,7 @@ const CameraTestPage = () => {
             </div>
 
             <div className="w-full flex flex-col items-end">
-              <SuccessButton>적용</SuccessButton>
+              <SuccessButton onClick={sendRequest}>적용</SuccessButton>
             </div>
           </article>
         </section>
