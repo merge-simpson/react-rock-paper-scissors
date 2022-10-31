@@ -8,9 +8,8 @@ function App() {
   // const [isAuthenticated, setAuthenticated] = useState<boolean>(false);
   const auth = useAuth();
   const { isAuthenticated } = auth;
-  const [RoutesComponent, setRoutesComponent] = useState<React.ReactElement>(
-    <UnauthenticatedRoutes />
-  );
+  const [RoutesComponent, setRoutesComponent] =
+    useState<React.ReactElement | null>(null);
 
   useEffect(() => {
     isAuthenticated && setRoutesComponent(<ProtectedRoutes />);
