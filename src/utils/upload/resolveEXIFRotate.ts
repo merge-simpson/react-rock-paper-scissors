@@ -13,7 +13,7 @@ const resolveEXIFRotate = (files: FileList | null) => {
       file,
       (img: any, data: loadImage.MetaData | undefined) => {
         const orientation = data?.exif?.get("Orientation");
-        console.log("origin Orinentation Data: ", orientation);
+        console.debug("origin Orinentation Data: ", orientation);
 
         if (!(data?.imageHead && data?.exif && orientation !== 1)) {
           console.debug("resolveEXIFRotate: 이미지를 회전하지 않아도 됨.");
@@ -38,11 +38,12 @@ const resolveEXIFRotate = (files: FileList | null) => {
                 const newFile = new File([newBlob], "rotatedImg.jpg", {
                   type: "image/jpeg",
                 });
-                console.log("new", newFile);
-                console.log("origin", file);
+                console.debug("new file: ", newFile);
+                console.debug("origin file: ", file);
+
                 // orientation 바뀜 확인용
                 loadImage.parseMetaData(newFile, function (data) {
-                  console.log(
+                  console.debug(
                     "New Orientation data: ",
                     data?.exif?.get("Orientation")
                   );
