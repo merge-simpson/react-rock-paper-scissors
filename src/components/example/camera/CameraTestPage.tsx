@@ -1,4 +1,4 @@
-import { DangerButton, DarkButton, SuccessButton } from "@styles/button";
+import { DangerButton, DarkButton } from "@styles/button";
 import { useCallback, useEffect, useRef, useState } from "react";
 import SampleImage from "@assets/img/sample.jpeg";
 import resolveEXIFRotate from "@utils/upload/resolveEXIFRotate";
@@ -69,20 +69,20 @@ const CameraTestPage = () => {
           </ul>
         </aside>
 
-        <section className="flex flex-row justify-between gap-4 items-center px-8 py-4 border shadow-md rounded-md">
+        <section className="flex flex-col gap-4 px-8 py-4 border shadow-md rounded-md items-end">
           <article>
             <h1 className="text-lg font-bold">미리 보기</h1>
 
             <figure className="relative">
               <img
                 src={(photoUrl as string) || SampleImage}
-                className={`w-40 h-40 border rounded-md ${
+                className={`w-full border rounded-md ${
                   !!photoUrl ? "border-dark" : ""
                 }`}
                 // TODO 다국어 처리
                 alt={
                   !!photoUrl
-                    ? "이미지 미리보기(Image Preview)"
+                    ? "미리보기 이미지(Image Preview)"
                     : "선택된 사진이 없을 때는 눈 덮인 산을 멀리서 담은 샘플 이미지"
                 }
               />
@@ -96,9 +96,9 @@ const CameraTestPage = () => {
             </figure>
           </article>
 
-          <article className="flex flex-col gap-2">
+          <article className="w-fit flex flex-col gap-4 items-end">
             <h1 className="font-bold">Control Preview Image</h1>
-            <div className="flex justify-between gap-2">
+            <div className="w-fit flex justify-between gap-4">
               <label>
                 <input
                   type="file"
@@ -129,7 +129,9 @@ const CameraTestPage = () => {
             </div>
 
             <div className="w-full flex flex-col items-end">
-              <SuccessButton onClick={sendRequest}>적용</SuccessButton>
+              <DarkButton onClick={sendRequest} className="w-full">
+                적용
+              </DarkButton>
             </div>
           </article>
         </section>
