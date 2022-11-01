@@ -80,9 +80,6 @@ const Home = () => {
   return (
     <div>
       <h1 className="text-2xl">Rock Paper Scissors</h1>
-      <aside>
-        <span>반응형은 적용 안 하므로 가로폭 1200 이상에서 보세요.</span>
-      </aside>
       <div className="flex flex-col items-center gap-4">
         <main className="w-[80vw] max-h-[85vh] flex flex-col items-center gap-4 py-8 border shadow rounded-md">
           <h1 className="text-2xl font-bold">Game Board</h1>
