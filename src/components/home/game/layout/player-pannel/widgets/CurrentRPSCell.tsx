@@ -15,7 +15,7 @@ export interface CurrentRPSCellProps extends CommonDivProps {
 const CurrentRPSCell: FC<CurrentRPSCellProps> = ({ rps, className }) => {
   return (
     <div
-      className={`border rounded-md shadow-inner bg-white flex items-center justify-center p-8 ${className}`}
+      className={`border rounded-md shadow-inner bg-white flex items-center justify-center p-[10%] ${className}`}
     >
       {!rps && <GrStatusUnknown className="w-full h-full" />}
       {rps === "ROCK" && <FaRegHandRock className="w-full h-full" />}
