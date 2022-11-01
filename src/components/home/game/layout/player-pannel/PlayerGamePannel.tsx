@@ -9,6 +9,8 @@ export interface PlayerGamePannelProps extends CommonDivProps {
   player: Player;
   currentRPS: RockPaperScissors | null;
   gameState: PlayerGameState | null;
+  historyScrollTop?: number;
+  setHistoryScrollTop?: (historyScrollTop: number) => void;
 }
 
 const PlayerGamePannel: FC<PlayerGamePannelProps> = ({
@@ -16,9 +18,12 @@ const PlayerGamePannel: FC<PlayerGamePannelProps> = ({
   currentRPS,
   gameState,
   className,
+  historyScrollTop,
+  setHistoryScrollTop,
 }) => {
   const currentBoxRef = useRef<HTMLDivElement | null>(null);
   const historyBoxRef = useRef<HTMLDivElement | null>(null);
+  const historyOLRef = useRef<HTMLOListElement | null>(null);
 
   useLayoutEffect(() => {
     if (!currentBoxRef.current) return;
@@ -42,6 +47,13 @@ const PlayerGamePannel: FC<PlayerGamePannelProps> = ({
     return () => window.removeEventListener("resize", resize);
   }, [currentBoxRef.current, historyBoxRef.current]);
 
+  useLayoutEffect(() => {
+    if (historyScrollTop == null || !historyOLRef.current) return;
+
+    historyOLRef.current.scrollTo({ top: historyScrollTop });
+    console.log("historyScrollTop", historyScrollTop);
+  }, [historyScrollTop]);
+
   return (
     <section className={`flex flex-col gap-4 px-4 ${className}`}>
       <h1 className="md:text-lg font-bold">{player.nickname}</h1>
@@ -64,7 +76,14 @@ const PlayerGamePannel: FC<PlayerGamePannelProps> = ({
             style={{ height: currentBoxRef.current?.offsetHeight ?? "auto" }}
           >
             <h1 className="text-sm lg:text-lg font-bold h-fit">History</h1>
-            <ol className="flex flex-col items-center gap-1 flex-auto overflow-scroll">
+            <ol
+              ref={historyOLRef}
+              className="flex flex-col items-center gap-1 flex-auto overflow-scroll"
+              onScroll={(evt) => {
+                setHistoryScrollTop &&
+                  setHistoryScrollTop((evt.target as HTMLElement).scrollTop);
+              }}
+            >
               {[...(gameState?.rpsHistory ?? [])]
                 ?.reverse()
                 .slice(1, 13)
