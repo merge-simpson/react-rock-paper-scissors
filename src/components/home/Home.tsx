@@ -28,6 +28,7 @@ const Home = () => {
   } = gameStore;
 
   const [cntCounterAI, setCntCounterAI] = useState<number>(1);
+  const [historyScrollTop, setHistoryScrollTop] = useState<number>(0);
 
   useEffect(() => {
     // not necessary on this logic
@@ -79,11 +80,8 @@ const Home = () => {
   return (
     <div>
       <h1 className="text-2xl">Rock Paper Scissors</h1>
-      <aside>
-        <span>반응형은 적용 안 하므로 가로폭 1200 이상에서 보세요.</span>
-      </aside>
       <div className="flex flex-col items-center gap-4">
-        <main className="w-[80vw] flex flex-col items-center gap-4 py-8 border shadow rounded-md">
+        <main className="w-[80vw] max-h-[85vh] flex flex-col items-center gap-4 py-8 border shadow rounded-md">
           <h1 className="text-2xl font-bold">Game Board</h1>
           <div className="w-full px-4 flex flex-col gap-2 items-end">
             <aside className="w-fit px-2 flex flex-col gap-2">
@@ -137,11 +135,14 @@ const Home = () => {
             )}
           </div>
           <section className="w-full grid grid-cols-2 px-4 max-h-[38rem] overflow-scroll">
+            {/* Player's Game Pannel: 나중에는 사용자 본인의 패널은 타인 패널과 달라질 수 있음. */}
             <PlayerGamePannel
               className="py-4"
               player={self}
               currentRPS={currentRPS}
               gameState={selfGameState}
+              historyScrollTop={historyScrollTop}
+              setHistoryScrollTop={setHistoryScrollTop}
             />
             {!counters?.length && (
               <div className="px-4 border-l-2">
@@ -150,6 +151,7 @@ const Home = () => {
                 </div>
               </div>
             )}
+            {/* Counters' Game Pannels */}
             {!!counters &&
               counters.map((counter, idx) => (
                 <PlayerGamePannel
@@ -166,6 +168,8 @@ const Home = () => {
                   gameState={
                     (couterGameStates && couterGameStates[idx]) ?? null
                   }
+                  historyScrollTop={historyScrollTop}
+                  setHistoryScrollTop={setHistoryScrollTop}
                 />
               ))}
           </section>

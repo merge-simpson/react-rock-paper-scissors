@@ -4,6 +4,7 @@ import { loginStep } from "@utils/auth/routes/LoginOutletComponents";
 import UIPreview from "@components/example/layouts/UIPreview";
 import PATH from "@utils/routes/PATH";
 import { Navigate, Route, Routes } from "react-router-dom";
+import CameraTestPage from "@components/example/camera/CameraTestPage";
 
 const UnauthenticatedRoutes = () => {
   return (
@@ -12,6 +13,7 @@ const UnauthenticatedRoutes = () => {
         <Route path=":stepName" element={<LoginOutlet />} />
         <Route path="" element={<Navigate replace to={loginStep[0]} />} />
       </Route>
+      <Route path={PATH.CAMERA_TEST} element={<CameraTestPage />} />
       <Route path="ui" element={<UIPreview />} />
       <Route path="*" element={<Navigate replace to={PATH.LOGIN} />} />
     </Routes>

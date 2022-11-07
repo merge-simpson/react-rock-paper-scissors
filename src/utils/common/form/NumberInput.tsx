@@ -22,7 +22,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         {...restProps}
         {...(value != null ? { value } : { defaultValue })}
         ref={ref}
-        className={`${className}`}
+        className={`min-w-0 ${className}`}
         onKeyDown={(event) => {
           if ("backspace" === event.key.toLowerCase()) {
             // onKeyDown에서는 변경되기 전 값을 알 수 있음.
