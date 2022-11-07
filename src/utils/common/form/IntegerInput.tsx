@@ -18,7 +18,7 @@ const IntegerInput = forwardRef<HTMLInputElement, IntegerInputProps>(
         {...restProps}
         {...(value != null ? { value } : { defaultValue })}
         ref={ref}
-        className={`${className}`}
+        className={`min-w-0 ${className}`}
         onChange={(event) => {
           if (event.target.value === "-") {
             return;

@@ -12,7 +12,7 @@ const TelInput = forwardRef<HTMLInputElement, TelInputProps>(
         {...restProps}
         type="text"
         ref={forwardRef}
-        className={`w-full px-2 py-1 ${className}`}
+        className={`min-w-0 px-2 py-1 ${className}`}
         onChange={(event) => {
           const hyphenReg =
             event.target.value.length >= 13
