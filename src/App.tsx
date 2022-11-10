@@ -23,9 +23,15 @@ function App() {
   }, [isAuthenticated]);
 
   useLayoutEffect(() => {
-    const OWNING_NAV_PATHNAME_LIST = [PATH.HOME, PATH.CAMERA_TEST, "/ui"];
+    const pathname = location.pathname.endsWith("/")
+      ? location.pathname.slice(0, -1)
+      : location.pathname;
 
-    const hasNav = OWNING_NAV_PATHNAME_LIST.includes(location.pathname);
+    const OWNING_NAV_PATHNAME_LIST = [PATH.HOME, PATH.CAMERA_TEST, "/ui"].map(
+      (path) => (path.endsWith("/") ? path.slice(0, -1) : path)
+    );
+
+    const hasNav = OWNING_NAV_PATHNAME_LIST.includes(pathname);
     setHasNav(hasNav);
   }, [location.pathname]);
 
